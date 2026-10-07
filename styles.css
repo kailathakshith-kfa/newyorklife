@@ -1,0 +1,1072 @@
+/* ==========================================================================
+   NEW YORK LIFE · ULTRA FIDELITY COMMERCIAL BROWSER GAME STYLES
+   ========================================================================== */
+
+:root {
+  --font-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Color Palette */
+  --bg-dark-window: #19202c;
+  --bg-url-bar: #272f3e;
+  --text-url: #cfd8dc;
+  
+  --color-primary: #0f172a;
+  --color-text-dark: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-white: #ffffff;
+  
+  --color-accent-green: #16a34a;
+  --color-bright-green: #22c55e;
+  --color-accent-blue: #0ea5e9;
+  --color-navy: #111827;
+  --color-pin-purple: #6366f1;
+  --color-gold: #f59e0b;
+  
+  /* Borders & Surfaces */
+  --card-border: #edf2f7;
+  --border-subtle: #e2e8f0;
+  --pill-bg: #f1f5f9;
+  --pill-hover: #e2e8f0;
+  
+  /* Shadows */
+  --shadow-floating-hud: 0 10px 25px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 6px 20px -2px rgba(0, 0, 0, 0.16);
+  --shadow-product: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-drawer: 0 -12px 32px rgba(0, 0, 0, 0.12);
+  --shadow-dock: 0 10px 26px rgba(0, 0, 0, 0.2);
+}
+
+/* Base Reset & Layout */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #0b0f19;
+  font-family: var(--font-primary);
+  color: var(--color-text-dark);
+  user-select: none;
+}
+
+/* Outer Mac OS Browser Window Container */
+.browser-window {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-dark-window);
+}
+
+/* Browser Title Bar / Chrome Header */
+.browser-header {
+  height: 42px;
+  min-height: 42px;
+  background-color: var(--bg-dark-window);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  z-index: 100;
+}
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.dot:hover {
+  opacity: 0.85;
+}
+
+.dot-close { background-color: #ff5f56; }
+.dot-minimize { background-color: #ffbd2e; }
+.dot-expand { background-color: #27c93f; }
+
+.url-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  background-color: var(--bg-url-bar);
+  padding: 4px 14px;
+  border-radius: 9999px;
+  width: 380px;
+  max-width: 45vw;
+  height: 28px;
+  color: var(--text-url);
+}
+
+.search-icon {
+  stroke: #94a3b8;
+  flex-shrink: 0;
+}
+
+.url-text {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  color: #e2e8f0;
+}
+
+.window-menu {
+  display: flex;
+  align-items: center;
+}
+
+.icon-btn-minimal {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+
+.icon-btn-minimal:hover {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   GAME VIEWPORT & SCENE
+   ========================================================================== */
+.game-viewport {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  height: calc(100vh - 42px);
+  overflow: hidden;
+  background-color: #0b0f19;
+}
+
+/* Isometric Apartment Background Layer */
+.apartment-canvas-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.apartment-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  display: block;
+}
+
+/* ==========================================================================
+   3D PLAYER CHARACTER STAGE
+   ========================================================================== */
+.player-character-stage {
+  position: absolute;
+  top: 38.5%;
+  left: 36.8%;
+  transform: translate(-50%, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.player-character-stage:hover {
+  transform: translate(-50%, -4px);
+}
+
+.player-floor-shadow {
+  position: absolute;
+  bottom: 2px;
+  width: 54px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
+  z-index: 1;
+}
+
+.player-glow-ring {
+  position: absolute;
+  bottom: -6px;
+  width: 66px;
+  height: 34px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ring-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.8), inset 0 0 10px rgba(245, 158, 11, 0.45);
+  animation: glowPulse 2.4s ease-in-out infinite;
+}
+
+.ring-core {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(254, 240, 138, 0.9);
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.7), inset 0 0 8px rgba(245, 158, 11, 0.35);
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    box-shadow: 0 0 24px rgba(245, 158, 11, 0.95), inset 0 0 14px rgba(245, 158, 11, 0.6);
+  }
+}
+
+.player-3d-character {
+  position: relative;
+  height: 124px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+  z-index: 3;
+}
+
+/* ==========================================================================
+   TOP HUD LAYER (LOGO & CENTERED HUD CAPSULE)
+   ========================================================================== */
+.hud-top-layer {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  right: 24px;
+  height: 48px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Logo (Top Left) */
+.game-logo {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.game-logo h1 {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--color-white);
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.game-logo h1:hover {
+  transform: scale(1.02);
+}
+
+/* Top Floating HUD Capsule (Centered) */
+.top-hud-capsule {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  background-color: var(--color-white);
+  height: 48px;
+  border-radius: 9999px;
+  box-shadow: var(--shadow-floating-hud);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px 0 22px;
+  gap: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+}
+
+.hud-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.hud-svg-icon {
+  color: #334155;
+  flex-shrink: 0;
+}
+
+.pin-icon {
+  fill: var(--color-pin-purple);
+  stroke: var(--color-pin-purple);
+}
+
+.mood-text {
+  color: var(--color-accent-green);
+  font-weight: 700;
+}
+
+.hud-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px;
+  border-left: 1px solid #f1f5f9;
+  border-right: 1px solid #f1f5f9;
+}
+
+.hud-action-btn {
+  background: none;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.hud-action-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.hud-cash-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cash-amount {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+
+.add-cash-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-bright-green);
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.4);
+  transition: all 0.15s ease;
+}
+
+.add-cash-btn:hover {
+  background-color: #16a34a;
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   LEFT HUD COLUMN (QUEST CARDS)
+   ========================================================================== */
+.hud-left-column {
+  position: absolute;
+  top: 76px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.hud-card {
+  background-color: var(--color-white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 206px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+
+.hud-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -2px rgba(0, 0, 0, 0.22);
+}
+
+.card-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dark-navy-box {
+  background-color: #1e293b;
+}
+
+.blue-diamond-box {
+  background-color: #0284c7;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.card-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+}
+
+.card-subtitle {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.challenge-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.progress-ratio {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-accent-green);
+}
+
+.progress-bar-track {
+  flex: 1;
+  height: 4px;
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--color-bright-green);
+  border-radius: 9999px;
+}
+
+/* ==========================================================================
+   CHARACTER VITALS CARD (BOTTOM-LEFT)
+   ========================================================================== */
+.character-vitals-card {
+  position: absolute;
+  bottom: 358px; /* Floats directly aligned with dock baseline above drawer */
+  left: 20px;
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 10px 14px 10px 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 278px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease;
+  cursor: pointer;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.character-vitals-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.avatar-portrait-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 2.5px solid #ffffff;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+  background: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vitals-stats-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.vital-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.vital-icon {
+  font-size: 11px;
+  line-height: 1;
+  width: 14px;
+  text-align: center;
+}
+
+.vital-name {
+  width: 44px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.vital-bar-track {
+  flex: 1;
+  height: 4.5px;
+  background-color: rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.vital-bar-fill {
+  height: 100%;
+  background-color: var(--color-bright-green);
+  border-radius: 9999px;
+}
+
+.vital-val {
+  width: 32px;
+  text-align: right;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 10.5px;
+}
+
+.vital-val.mood-val {
+  color: var(--color-bright-green);
+  width: auto;
+}
+
+/* ==========================================================================
+   CENTER FLOATING NAVIGATION PILL DOCK
+   ========================================================================== */
+.center-nav-dock {
+  position: absolute;
+  bottom: 358px; /* Floats with clean 10px clearance above Buy Mode drawer */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-white);
+  height: 48px;
+  border-radius: 9999px;
+  box-shadow: var(--shadow-dock);
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 25;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  pointer-events: auto;
+}
+
+.nav-dock-tab {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.nav-dock-tab:hover {
+  color: #0f172a;
+  background-color: #f8fafc;
+}
+
+.nav-dock-tab.active {
+  background-color: #111827;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 8px 22px;
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.25);
+}
+
+.nav-dock-tab.active .dock-svg {
+  stroke: #ffffff;
+}
+
+.dock-svg {
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   BOTTOM DOCKED BUY MODE DRAWER PANEL
+   ========================================================================== */
+.buy-mode-drawer {
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  right: 8px;
+  height: 348px; /* Exact height matching reference layout */
+  background-color: var(--color-white);
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  box-shadow: var(--shadow-drawer);
+  padding: 16px 24px 16px 24px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.buy-mode-drawer.minimized {
+  transform: translateY(calc(100% - 64px));
+}
+
+/* Drawer Header Row */
+.drawer-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 48px;
+}
+
+.drawer-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.drawer-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background-color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.drawer-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.drawer-main-title {
+  font-size: 21px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.4px;
+  line-height: 1.1;
+}
+
+.drawer-subtitle {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* Category Filter Pills */
+.category-pills-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.category-pills-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-pill {
+  background-color: var(--pill-bg);
+  border: none;
+  color: #334155;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.cat-pill:hover {
+  background-color: var(--pill-hover);
+  color: #0f172a;
+}
+
+.cat-pill.active {
+  background-color: #111827;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Drawer Right Controls (Search & Close) */
+.drawer-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.search-input-pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  height: 36px;
+  width: 210px;
+  padding: 0 14px 0 34px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-input-pill:focus-within {
+  border-color: #94a3b8;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.05);
+}
+
+.search-field-icon {
+  position: absolute;
+  left: 12px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.search-input-pill input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.search-input-pill input::placeholder {
+  color: #94a3b8;
+}
+
+.drawer-close-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.drawer-close-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   PRODUCT CAROUSEL & CARDS
+   ========================================================================== */
+.product-carousel-wrapper {
+  position: relative;
+  margin-top: 14px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.product-cards-row {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
+  overflow-x: auto;
+  padding: 4px 6px 12px 2px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.product-cards-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.product-cards-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.product-cards-row::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 9999px;
+}
+
+/* Single Product Card */
+.product-card {
+  flex: 0 0 calc((100% - (7 * 16px)) / 8); /* Exactly 8 cards visible across the full width */
+  min-width: 172px;
+  max-width: 195px;
+  height: 226px;
+  background-color: var(--color-white);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-product);
+  padding: 8px 12px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, border-color 0.18s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+.product-thumb-area {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2px 0;
+}
+
+.product-img {
+  max-width: 100%;
+  max-height: 138px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.04);
+}
+
+/* Product Info Row (Bottom) */
+.product-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4px;
+  border-top: 1px solid #f8fafc;
+}
+
+.product-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.product-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+}
+
+.product-price {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--color-accent-green);
+  letter-spacing: -0.2px;
+}
+
+.card-cart-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background-color: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.card-cart-btn:hover {
+  background-color: #111827;
+  color: #ffffff;
+  border-color: #111827;
+  transform: scale(1.08);
+}
+
+/* Carousel Right Arrow Button */
+.carousel-next-btn {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #334155;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.15s ease;
+}
+
+.carousel-next-btn:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  transform: translateY(-50%) scale(1.06);
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATIONS
+   ========================================================================== */
+.toast-container {
+  position: absolute;
+  bottom: 370px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.game-toast {
+  background: #111827;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideToastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideToastIn {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE TUNING
+   ========================================================================== */
+@media (max-width: 1400px) {
+  .top-hud-capsule {
+    gap: 14px;
+    padding: 0 6px 0 16px;
+  }
+  .hud-item {
+    font-size: 12.5px;
+  }
+  .product-card {
+    min-width: 160px;
+  }
+}
