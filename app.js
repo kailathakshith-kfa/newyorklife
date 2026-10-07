@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const addCashBtn = document.getElementById('addCashBtn');
   const soundBtn = document.getElementById('soundBtn');
   const downloadBtn = document.getElementById('downloadBtn');
-  const timeDisplay = document.getElementById('timeDisplay');
   const navTabs = document.querySelectorAll('.nav-dock-tab');
+  const centerNavDock = document.getElementById('centerNavDock');
+  const characterVitalsCard = document.getElementById('characterVitalsCard');
   const catPills = document.querySelectorAll('.cat-pill');
   const searchInput = document.getElementById('searchInput');
   const productCards = document.querySelectorAll('.product-card');
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const carouselNextBtn = document.getElementById('carouselNextBtn');
   const drawerCloseBtn = document.getElementById('drawerCloseBtn');
   const buyModeDrawer = document.getElementById('buyModeDrawer');
-  const playerRing = document.getElementById('playerRing');
+  const playerStage = document.getElementById('playerStage');
   const toastContainer = document.getElementById('toastContainer');
   const questCards = document.querySelectorAll('.hud-card');
 
@@ -44,6 +45,22 @@ document.addEventListener('DOMContentLoaded', () => {
       toast.style.transition = 'all 0.25s ease';
       setTimeout(() => toast.remove(), 250);
     }, 2800);
+  }
+
+  // --- Open / Close Drawer Helper ---
+  function setDrawerOpen(open) {
+    isDrawerOpen = open;
+    if (open) {
+      buyModeDrawer.classList.remove('minimized');
+      centerNavDock.classList.remove('dock-at-bottom');
+      characterVitalsCard.classList.remove('vitals-at-bottom');
+      document.querySelectorAll('.nav-dock-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('navBuyTab')?.classList.add('active');
+    } else {
+      buyModeDrawer.classList.add('minimized');
+      centerNavDock.classList.add('dock-at-bottom');
+      characterVitalsCard.classList.add('vitals-at-bottom');
+    }
   }
 
   // --- Add Cash Interaction ---
@@ -79,22 +96,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const tabText = tab.querySelector('span')?.textContent.trim();
       if (tabText === 'Buy') {
-        buyModeDrawer.classList.remove('minimized');
-        isDrawerOpen = true;
+        setDrawerOpen(true);
       } else {
+        setDrawerOpen(false);
         showToast(`Switched view to ${tabText}`, '📍');
       }
     });
   });
 
-  // --- Drawer Close / Minimize Toggle ---
+  // --- Drawer Close / Minimize Button ---
   if (drawerCloseBtn) {
     drawerCloseBtn.addEventListener('click', () => {
-      isDrawerOpen = false;
-      buyModeDrawer.classList.add('minimized');
+      setDrawerOpen(false);
       document.getElementById('navBuyTab')?.classList.remove('active');
       document.getElementById('navHomeTab')?.classList.add('active');
-      showToast('Buy Mode minimized. Tap Buy to open again.', '📦');
+      showToast('Buy Mode closed. View cleared!', '✨');
     });
   }
 
@@ -123,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function filterCards(cat, query) {
-    let visibleCount = 0;
     productCards.forEach(card => {
       const cardCat = (card.dataset.cat || '').toLowerCase();
       const cardName = (card.dataset.name || '').toLowerCase();
@@ -133,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (matchesCat && matchesSearch) {
         card.style.display = 'flex';
-        visibleCount++;
       } else {
         card.style.display = 'none';
       }
@@ -170,14 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Carousel Scroll Right Button ---
   if (carouselNextBtn && productCardsRow) {
     carouselNextBtn.addEventListener('click', () => {
-      const scrollAmount = 380;
-      productCardsRow.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      productCardsRow.scrollBy({ left: 380, behavior: 'smooth' });
     });
   }
 
-  // --- Interactive Player Ring ---
-  if (playerRing) {
-    playerRing.addEventListener('click', () => {
+  // --- Interactive Player Ring / Stage ---
+  if (playerStage) {
+    playerStage.addEventListener('click', () => {
       showToast('Alex · Brooklyn Resident · Level 14 Designer', '⭐');
     });
   }

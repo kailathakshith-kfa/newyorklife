@@ -29,12 +29,27 @@
   --pill-bg: #f1f5f9;
   --pill-hover: #e2e8f0;
   
+  /* Drawer & Dock Dynamics */
+  --drawer-height: 334px;
+  
   /* Shadows */
   --shadow-floating-hud: 0 10px 25px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --shadow-card: 0 6px 20px -2px rgba(0, 0, 0, 0.16);
   --shadow-product: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-drawer: 0 -12px 32px rgba(0, 0, 0, 0.12);
+  --shadow-drawer: 0 -12px 32px rgba(0, 0, 0, 0.14);
   --shadow-dock: 0 10px 26px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-height: 860px) {
+  :root {
+    --drawer-height: 295px;
+  }
+}
+
+@media (max-height: 750px) {
+  :root {
+    --drawer-height: 260px;
+  }
 }
 
 /* Base Reset & Layout */
@@ -185,8 +200,8 @@ html, body {
    ========================================================================== */
 .player-character-stage {
   position: absolute;
-  top: 38.5%;
-  left: 36.8%;
+  top: 32%;
+  left: 36%;
   transform: translate(-50%, 0);
   display: flex;
   flex-direction: column;
@@ -204,8 +219,8 @@ html, body {
 .player-floor-shadow {
   position: absolute;
   bottom: 2px;
-  width: 54px;
-  height: 16px;
+  width: 50px;
+  height: 14px;
   border-radius: 50%;
   background: radial-gradient(ellipse, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
   z-index: 1;
@@ -214,8 +229,8 @@ html, body {
 .player-glow-ring {
   position: absolute;
   bottom: -6px;
-  width: 66px;
-  height: 34px;
+  width: 62px;
+  height: 32px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 2;
@@ -258,7 +273,7 @@ html, body {
 
 .player-3d-character {
   position: relative;
-  height: 124px;
+  height: clamp(100px, 14vh, 122px);
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
@@ -270,7 +285,7 @@ html, body {
    ========================================================================== */
 .hud-top-layer {
   position: absolute;
-  top: 20px;
+  top: 18px;
   left: 24px;
   right: 24px;
   height: 48px;
@@ -316,7 +331,7 @@ html, body {
   display: inline-flex;
   align-items: center;
   padding: 0 8px 0 22px;
-  gap: 22px;
+  gap: 20px;
   border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
@@ -513,7 +528,7 @@ html, body {
    ========================================================================== */
 .character-vitals-card {
   position: absolute;
-  bottom: 358px; /* Floats directly aligned with dock baseline above drawer */
+  bottom: calc(var(--drawer-height) + 12px);
   left: 20px;
   background: rgba(15, 23, 42, 0.78);
   backdrop-filter: blur(14px);
@@ -526,10 +541,14 @@ html, body {
   gap: 12px;
   width: 278px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-  transition: transform 0.15s ease;
+  transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s ease;
   cursor: pointer;
   z-index: 20;
   pointer-events: auto;
+}
+
+.character-vitals-card.vitals-at-bottom {
+  bottom: 22px;
 }
 
 .character-vitals-card:hover {
@@ -618,7 +637,7 @@ html, body {
    ========================================================================== */
 .center-nav-dock {
   position: absolute;
-  bottom: 358px; /* Floats with clean 10px clearance above Buy Mode drawer */
+  bottom: calc(var(--drawer-height) + 12px);
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--color-white);
@@ -629,9 +648,14 @@ html, body {
   display: flex;
   align-items: center;
   gap: 4px;
-  z-index: 25;
+  z-index: 35;
   border: 1px solid rgba(255, 255, 255, 0.95);
   pointer-events: auto;
+  transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease;
+}
+
+.center-nav-dock.dock-at-bottom {
+  bottom: 22px;
 }
 
 .nav-dock-tab {
@@ -681,22 +705,22 @@ html, body {
   bottom: 0;
   left: 8px;
   right: 8px;
-  height: 348px; /* Exact height matching reference layout */
+  height: var(--drawer-height);
   background-color: var(--color-white);
   border-top-left-radius: 28px;
   border-top-right-radius: 28px;
   box-shadow: var(--shadow-drawer);
-  padding: 16px 24px 16px 24px;
+  padding: 14px 24px 14px 24px;
   z-index: 30;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: auto;
   border-top: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .buy-mode-drawer.minimized {
-  transform: translateY(calc(100% - 64px));
+  transform: translateY(105%);
 }
 
 /* Drawer Header Row */
@@ -705,7 +729,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  height: 48px;
+  height: 46px;
 }
 
 .drawer-title-group {
@@ -733,7 +757,7 @@ html, body {
 }
 
 .drawer-main-title {
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 800;
   color: #0f172a;
   letter-spacing: -0.4px;
@@ -741,7 +765,7 @@ html, body {
 }
 
 .drawer-subtitle {
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 500;
   color: #64748b;
   white-space: nowrap;
@@ -861,7 +885,7 @@ html, body {
    ========================================================================== */
 .product-carousel-wrapper {
   position: relative;
-  margin-top: 14px;
+  margin-top: 10px;
   flex: 1;
   display: flex;
   align-items: center;
@@ -870,10 +894,10 @@ html, body {
 .product-cards-row {
   display: flex;
   align-items: stretch;
-  gap: 16px;
+  gap: 14px;
   width: 100%;
   overflow-x: auto;
-  padding: 4px 6px 12px 2px;
+  padding: 4px 6px 8px 2px;
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
@@ -894,15 +918,15 @@ html, body {
 
 /* Single Product Card */
 .product-card {
-  flex: 0 0 calc((100% - (7 * 16px)) / 8); /* Exactly 8 cards visible across the full width */
-  min-width: 172px;
+  flex: 0 0 calc((100% - (7 * 14px)) / 8); /* Exactly 8 cards visible across the full width */
+  min-width: 160px;
   max-width: 195px;
-  height: 226px;
+  height: clamp(195px, 24vh, 226px);
   background-color: var(--color-white);
   border: 1px solid var(--card-border);
-  border-radius: 20px;
+  border-radius: 18px;
   box-shadow: var(--shadow-product);
-  padding: 8px 12px 10px 12px;
+  padding: 6px 10px 8px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -929,7 +953,7 @@ html, body {
 
 .product-img {
   max-width: 100%;
-  max-height: 138px;
+  max-height: clamp(105px, 15vh, 136px);
   object-fit: contain;
   transition: transform 0.2s ease;
 }
@@ -954,22 +978,22 @@ html, body {
 }
 
 .product-name {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: #0f172a;
   letter-spacing: -0.2px;
 }
 
 .product-price {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
   color: var(--color-accent-green);
   letter-spacing: -0.2px;
 }
 
 .card-cart-btn {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 10px;
   background-color: #f8fafc;
   border: 1px solid var(--border-subtle);
@@ -1021,7 +1045,7 @@ html, body {
    ========================================================================== */
 .toast-container {
   position: absolute;
-  bottom: 370px;
+  bottom: 90px;
   right: 24px;
   display: flex;
   flex-direction: column;
@@ -1067,6 +1091,6 @@ html, body {
     font-size: 12.5px;
   }
   .product-card {
-    min-width: 160px;
+    min-width: 155px;
   }
 }
